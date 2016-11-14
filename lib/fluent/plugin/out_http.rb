@@ -65,7 +65,8 @@ module Fluent
     end
 
     SUCCESSFUL_RESPONSE_CODE_PREFIX = '2'
-    private_constant :SUCCESSFUL_RESPONSE_CODE_PREFIX
+    USER_AGENT = 'FluentPluginHTTP'
+    private_constant :SUCCESSFUL_RESPONSE_CODE_PREFIX, :USER_AGENT
 
     # Sends the event records
     #
@@ -76,6 +77,7 @@ module Fluent
       chunk.msgpack_each do |_tag, _time, record|
         post_record = Net::HTTP::Post.new(url)
         post_record.set_form_data(record)
+        post_record['User-Agent'] = USER_AGENT
 
         response = http.request(post_record)
 

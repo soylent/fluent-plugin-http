@@ -56,7 +56,9 @@ class TestFluentHTTPOutput < Test::Unit::TestCase
       @driver.emit(foo: 'bar')
       @driver.run
 
-      assert_requested request.with(body: 'foo=bar')
+      assert_requested request
+        .with(body: 'foo=bar')
+        .with(headers: { 'User-Agent' => 'FluentPluginHTTP' })
     end
 
     test 'that unsuccessful response raises an exception' do

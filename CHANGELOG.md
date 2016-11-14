@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+### Changed
+- Change user agent to `FluentPluginHTTP`
+
 ## [0.1.1] - 2016-11-06
 ### Fixed
 - Include missing `net/http`
