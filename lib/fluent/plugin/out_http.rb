@@ -12,6 +12,9 @@ module Fluent
     desc 'The URL to send event records to'
     config_param :url, :string
 
+    desc 'The acceptable response status code'
+    config_param :accept_status_code, :array, default: ['200']
+
     def initialize
       require 'fluent/plugin/http/error'
 
@@ -25,14 +28,8 @@ module Fluent
     def configure(conf)
       super
 
-      @url = URI(conf.fetch('url'))
-
-      unless @url.scheme == 'http' || @url.scheme == 'https'
-        raise Fluent::ConfigError,
-              "Unacceptable URL scheme, expected HTTP or HTTPs: #{@url}"
-      end
-    rescue URI::InvalidURIError => invalid_uri_error
-      raise Fluent::ConfigError, invalid_uri_error
+      @url = validate_url(url)
+      @accept_status_code = validate_accept_status_code(accept_status_code)
     end
 
     # Hook method that is called at the startup
@@ -64,9 +61,8 @@ module Fluent
       [tag, time, record].to_msgpack
     end
 
-    SUCCESSFUL_RESPONSE_CODE_PREFIX = '2'
     USER_AGENT = 'FluentPluginHTTP'
-    private_constant :SUCCESSFUL_RESPONSE_CODE_PREFIX, :USER_AGENT
+    private_constant :USER_AGENT
 
     # Sends the event records
     #
@@ -81,7 +77,7 @@ module Fluent
 
         response = http.request(post_record)
 
-        unless response.code.start_with?(SUCCESSFUL_RESPONSE_CODE_PREFIX)
+        unless accept_status_code.include?(response.code)
           raise ResponseError.error(post_record, response)
         end
       end
@@ -90,5 +86,30 @@ module Fluent
     private
 
     attr_reader :http
+
+    def validate_url(test_url)
+      url = URI(test_url)
+      return url if url.scheme == 'http' || url.scheme == 'https'
+
+      raise Fluent::ConfigError,
+            "Unacceptable URL scheme, expected HTTP or HTTPs: #{test_url}"
+    rescue URI::InvalidURIError => invalid_uri_error
+      raise Fluent::ConfigError, invalid_uri_error
+    end
+
+    def validate_accept_status_code(status_codes)
+      if !status_codes.empty? && status_codes.all?(&method(:http_status_code?))
+        return status_codes
+      end
+
+      raise Fluent::ConfigError, "Invalid status codes: #{status_codes.inspect}"
+    end
+
+    HTTP_STATUS_CODE_RANGE = (100...600).freeze
+    private_constant :HTTP_STATUS_CODE_RANGE
+
+    def http_status_code?(code)
+      HTTP_STATUS_CODE_RANGE.cover?(code.to_i)
+    end
   end
 end

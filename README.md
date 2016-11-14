@@ -10,6 +10,7 @@ The `out_http` buffered output plugin that sends event records via HTTP.
       @type http
 
       url https://example.org/
+      accept_status_code 200,204,303 # Default: 200
     </match>
 
 ## Contributing
