@@ -2,6 +2,7 @@
 require 'fluent/output'
 require 'uri'
 require 'net/http'
+require 'json'
 
 # Fluentd
 module Fluent
@@ -61,31 +62,39 @@ module Fluent
       [tag, time, record].to_msgpack
     end
 
-    USER_AGENT = 'FluentPluginHTTP'
-    private_constant :USER_AGENT
-
     # Sends the event records
     #
     # @param chunk [#msgpack_each] buffer chunk that includes multiple
     #   formatted events
     # @return void
     def write(chunk)
-      chunk.msgpack_each do |_tag, _time, record|
-        post_record = Net::HTTP::Post.new(url)
-        post_record.set_form_data(record)
-        post_record['User-Agent'] = USER_AGENT
+      records = []
+      chunk.msgpack_each { |_tag, _time, record| records << record }
 
-        response = http.request(post_record)
+      post_records = post_records_request(records)
+      response = http.request(post_records)
 
-        unless accept_status_code.include?(response.code)
-          raise ResponseError.error(post_record, response)
-        end
-      end
+      return if accept_status_code.include?(response.code)
+      raise ResponseError.error(post_records, response)
     end
 
     private
 
     attr_reader :http
+
+    JSON_MIME_TYPE = 'application/json'
+    USER_AGENT = 'FluentPluginHTTP'
+    SERIALIZER = JSON
+
+    private_constant :USER_AGENT, :JSON_MIME_TYPE, :SERIALIZER
+
+    def post_records_request(records)
+      Net::HTTP::Post.new(url).tap do |request|
+        request.body = SERIALIZER.dump(records)
+        request.content_type = JSON_MIME_TYPE
+        request['User-Agent'] = USER_AGENT
+      end
+    end
 
     def validate_url(test_url)
       url = URI(test_url)

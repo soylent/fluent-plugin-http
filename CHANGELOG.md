@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2016-12-24
+### Changed
+- Send a chunk of event records at once
+
 ## [0.2.0] - 2016-11-14
 ### Changed
 - Change user agent to `FluentPluginHTTP`

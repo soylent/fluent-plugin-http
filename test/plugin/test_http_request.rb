@@ -19,7 +19,7 @@ class TestHTTPRequest < Test::Unit::TestCase
     @driver.run
 
     assert_requested request
-      .with(body: 'foo=bar')
+      .with(body: '[{"foo":"bar"}]')
       .with(headers: { 'User-Agent' => 'FluentPluginHTTP' })
   end
 

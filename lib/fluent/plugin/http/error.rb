@@ -4,7 +4,7 @@ module Fluent
     # Unsuccessful response error
     ResponseError = Class.new(StandardError) do
       def self.error(request, response)
-        new "Failed to POST event record to #{request.uri} because of " \
+        new "Failed to POST event records to #{request.uri} because of " \
             "unsuccessful response code: #{response.code.inspect} " \
             "#{response.body.inspect}"
       end
