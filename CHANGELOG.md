@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+### Added
+- Token access authentication
+
 ## [0.3.0] - 2016-12-24
 ### Changed
 - Send a chunk of event records at once

@@ -6,10 +6,7 @@ class TestHTTPRequest < Test::Unit::TestCase
   include TestHelpers
 
   def setup
-    @driver = create_driver <<-CONF
-      url https://example.org/
-      accept_status_code 200, 303
-    CONF
+    @driver = create_driver_with_default_url('accept_status_code 200, 303')
   end
 
   test 'that event record is sent' do

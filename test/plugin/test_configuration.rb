@@ -34,10 +34,6 @@ class TestConfiguration < Test::Unit::TestCase
     assert_equal URI('https://example.org/'), driver.instance.url
   end
 
-  def create_driver_with_default_url(conf)
-    create_driver "url https://example.org/\n#{conf}"
-  end
-
   test 'that acceptable response status codes can be configured' do
     driver = create_driver_with_default_url 'accept_status_code 201'
 
@@ -45,7 +41,7 @@ class TestConfiguration < Test::Unit::TestCase
   end
 
   test 'that acceptable response status code is 200 by default' do
-    driver = create_driver_with_default_url ''
+    driver = create_driver_with_default_url
 
     assert_equal ['200'], driver.instance.accept_status_code
   end
@@ -71,6 +67,24 @@ class TestConfiguration < Test::Unit::TestCase
   test 'that acceptable response status code cannot be more than 599' do
     assert_raise Fluent::ConfigError do
       create_driver_with_default_url 'accept_status_code 600'
+    end
+  end
+
+  test 'that authorization token can be configured' do
+    driver = create_driver_with_default_url 'authorization_token foo'
+
+    assert_equal 'foo', driver.instance.authorization_token
+  end
+
+  test 'that authorization token is nil by default' do
+    driver = create_driver_with_default_url
+
+    assert_nil driver.instance.authorization_token
+  end
+
+  test 'that authorization token cannot be empty' do
+    assert_raise Fluent::ConfigError do
+      create_driver_with_default_url 'authorization_token'
     end
   end
 end
