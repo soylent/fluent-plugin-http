@@ -18,9 +18,10 @@ class TestHTTPRequest < Test::Unit::TestCase
     @driver.emit(foo: 'bar')
     @driver.run
 
-    assert_requested request
-      .with(body: '[{"foo":"bar"}]')
-      .with(headers: { 'User-Agent' => 'FluentPluginHTTP' })
+    assert_requested request.with(
+      body: '[{"foo":"bar"}]',
+      headers: { 'User-Agent' => 'FluentPluginHTTP' }
+    )
   end
 
   test 'that unacceptable response status code raises an exception' do
