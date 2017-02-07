@@ -10,10 +10,10 @@ module Fluent
   class HTTPOutput < BufferedOutput
     Fluent::Plugin.register_output('http', self)
 
-    desc 'The URL to send event records to'
+    desc 'URL to send event records to'
     config_param :url, :string
 
-    desc 'The acceptable response status code'
+    desc 'Acceptable response status codes'
     config_param :accept_status_code, :array, default: ['200']
 
     def initialize
