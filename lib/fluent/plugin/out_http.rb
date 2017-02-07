@@ -84,13 +84,12 @@ module Fluent
 
     JSON_MIME_TYPE = 'application/json'
     USER_AGENT = 'FluentPluginHTTP'
-    SERIALIZER = JSON
 
-    private_constant :USER_AGENT, :JSON_MIME_TYPE, :SERIALIZER
+    private_constant :USER_AGENT, :JSON_MIME_TYPE
 
     def post_records_request(records)
       Net::HTTP::Post.new(url).tap do |request|
-        request.body = SERIALIZER.dump(records)
+        request.body = JSON.dump(records)
         request.content_type = JSON_MIME_TYPE
         request['User-Agent'] = USER_AGENT
       end
