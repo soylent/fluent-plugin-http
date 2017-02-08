@@ -12,4 +12,8 @@ module TestHelpers
     driver = Fluent::Test::BufferedOutputTestDriver.new(Fluent::HTTPOutput)
     driver.configure(conf)
   end
+
+  def create_driver_with_default_url(conf = '')
+    create_driver "url https://example.org/\n#{conf}"
+  end
 end

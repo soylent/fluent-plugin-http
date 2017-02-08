@@ -11,6 +11,7 @@ The `out_http` buffered output plugin that sends event records via HTTP.
 
       url https://example.org/
       accept_status_code 200,204,303 # Default: 200
+      authorization_token secret # Default: nil
     </match>
 
 ## Contributing

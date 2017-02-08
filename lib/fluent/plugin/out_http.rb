@@ -16,6 +16,9 @@ module Fluent
     desc 'Acceptable response status codes'
     config_param :accept_status_code, :array, default: ['200']
 
+    desc 'Authorization token'
+    config_param :authorization_token, :string, default: nil
+
     def initialize
       require 'fluent/plugin/http/error'
 
@@ -31,6 +34,7 @@ module Fluent
 
       @url = validate_url(url)
       @accept_status_code = validate_accept_status_code(accept_status_code)
+      @authorization_token = validate_authorization_token(authorization_token)
     end
 
     # Hook method that is called at the startup
@@ -92,6 +96,10 @@ module Fluent
         request.body = JSON.dump(records)
         request.content_type = JSON_MIME_TYPE
         request['User-Agent'] = USER_AGENT
+
+        if authorization_token
+          request['Authorization'] = "Token token=#{authorization_token}"
+        end
       end
     end
 
@@ -118,6 +126,13 @@ module Fluent
 
     def http_status_code?(code)
       HTTP_STATUS_CODE_RANGE.cover?(code.to_i)
+    end
+
+    def validate_authorization_token(value)
+      return value if value.nil?
+      return value unless value.empty?
+
+      raise Fluent::ConfigError, "Invalid authorization token: #{value.inspect}"
     end
   end
 end
