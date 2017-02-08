@@ -17,7 +17,7 @@ module Fluent
     config_param :accept_status_code, :array, default: ['200']
 
     desc 'Authorization token'
-    config_param :authorization_token, :string, default: nil
+    config_param :authorization_token, :string, default: nil, secret: true
 
     def initialize
       require 'fluent/plugin/http/error'
