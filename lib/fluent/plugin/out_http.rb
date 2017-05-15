@@ -7,7 +7,7 @@ require 'json'
 # Fluentd
 module Fluent
   # The out_http buffered output plugin sends event records via HTTP.
-  class HTTPOutput < BufferedOutput
+  class HTTPOutput < ObjectBufferedOutput
     Fluent::Plugin.register_output('http', self)
 
     desc 'URL to send event records to'
@@ -73,7 +73,10 @@ module Fluent
     # @return void
     def write(chunk)
       records = []
-      chunk.msgpack_each { |_tag, _time, record| records << record }
+
+      chunk.msgpack_each do |tag_time_record|
+        records << (_record = tag_time_record.last)
+      end
 
       post_records = post_records_request(records)
       response = http.request(post_records)
