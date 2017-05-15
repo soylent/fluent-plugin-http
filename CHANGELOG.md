@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.4.1] - 2017-05-15
+### Fixed
+- Fix the issue incorrect buffer chunk filenames
+
 ## [0.4.0] - 2017-02-08
 ### Added
 - Token access authentication
