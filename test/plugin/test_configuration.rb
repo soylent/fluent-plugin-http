@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'test_helper'
 
 class TestConfiguration < Test::Unit::TestCase
@@ -49,7 +50,7 @@ class TestConfiguration < Test::Unit::TestCase
   test 'that acceptable response status code can include several values' do
     driver = create_driver_with_default_url 'accept_status_code 200, 201'
 
-    assert_equal %w(200 201), driver.instance.accept_status_code
+    assert_equal %w[200 201], driver.instance.accept_status_code
   end
 
   test 'that acceptable response status code cannot be empty' do

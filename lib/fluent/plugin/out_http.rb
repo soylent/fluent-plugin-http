@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'fluent/output'
 require 'uri'
 require 'net/http'
