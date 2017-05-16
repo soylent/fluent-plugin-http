@@ -10,7 +10,8 @@ Gem::Specification.new do |spec|
   spec.files = Dir['lib/**/*']
   spec.require_paths = 'lib'
 
-  spec.add_dependency 'fluentd', ENV.fetch('FLUENTD_VERSION', '~> 0.12')
+  spec.add_runtime_dependency 'fluentd', ENV.fetch('FLUENTD_VERSION', '~> 0.12')
+  spec.add_runtime_dependency 'oj'
 
   spec.add_development_dependency 'bundler', '~> 1.7'
   spec.add_development_dependency 'rake', '~> 11.3'

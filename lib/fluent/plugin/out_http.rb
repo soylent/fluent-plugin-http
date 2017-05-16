@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require 'fluent/output'
-require 'uri'
 require 'net/http'
-require 'json'
+require 'oj'
+require 'uri'
 
 # Fluentd
 module Fluent
@@ -97,7 +97,8 @@ module Fluent
 
     def post_records_request(records)
       Net::HTTP::Post.new(url).tap do |request|
-        request.body = JSON.dump(records)
+        request.body = Oj.dump(records)
+
         request.content_type = JSON_MIME_TYPE
         request['User-Agent'] = USER_AGENT
 

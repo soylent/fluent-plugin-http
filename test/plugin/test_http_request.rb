@@ -37,4 +37,15 @@ class TestHTTPRequest < Test::Unit::TestCase
 
     assert_nothing_raised { @driver.run }
   end
+
+  test 'that the strings are considered UTF-8 encoded' do
+    request = stub_request(:post, @driver.instance.url)
+
+    string = "\xE8\x81\x94\xE6\x83\xB3".dup
+
+    @driver.emit(foo: string.force_encoding('ASCII-8BIT'))
+    @driver.run
+
+    assert_requested request.with(body: '[{"foo":"联想"}]')
+  end
 end
