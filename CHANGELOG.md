@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.4.2] - 2017-05-16
+### Fixed
+- JSON encoding issue
+
 ## [0.4.1] - 2017-05-15
 ### Fixed
 - Fix the issue incorrect buffer chunk filenames
