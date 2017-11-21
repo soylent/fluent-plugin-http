@@ -48,4 +48,12 @@ class TestHTTPRequest < Test::Unit::TestCase
 
     assert_requested request.with(body: '[{"foo":"联想"}]')
   end
+
+  test 'that empty chunks are not sent' do
+    request = stub_request(:post, @driver.instance.url)
+
+    @driver.run
+
+    assert_not_requested request
+  end
 end

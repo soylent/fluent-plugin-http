@@ -73,6 +73,8 @@ module Fluent
     #   formatted events
     # @return void
     def write(chunk)
+      return if chunk.empty?
+
       records = []
 
       chunk.msgpack_each do |tag_time_record|
