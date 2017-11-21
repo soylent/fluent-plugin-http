@@ -90,8 +90,8 @@ module Fluent
 
     attr_reader :http
 
-    JSON_MIME_TYPE = 'application/json'
-    USER_AGENT = 'FluentPluginHTTP'
+    JSON_MIME_TYPE = 'application/json'.freeze
+    USER_AGENT = 'FluentPluginHTTP'.freeze
 
     private_constant :USER_AGENT, :JSON_MIME_TYPE
 
