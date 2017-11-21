@@ -20,6 +20,9 @@ module Fluent
     desc 'Authorization token'
     config_param :authorization_token, :string, default: nil, secret: true
 
+    desc 'Keep-alive timeout'
+    config_param :keep_alive_timeout, :float, default: 60.0
+
     def initialize
       require 'fluent/plugin/http/error'
 
@@ -36,6 +39,7 @@ module Fluent
       @url = validate_url(url)
       @accept_status_code = validate_accept_status_code(accept_status_code)
       @authorization_token = validate_authorization_token(authorization_token)
+      @keep_alive_timeout = validate_keep_alive_timeout(keep_alive_timeout)
     end
 
     # Hook method that is called at the shutdown
@@ -90,8 +94,12 @@ module Fluent
     private_constant :HTTPS_SCHEME
 
     def connect
-      @http ||=
-        Net::HTTP.start(url.host, url.port, use_ssl: url.scheme == HTTPS_SCHEME)
+      @http ||= Net::HTTP.start(
+        url.host,
+        url.port,
+        use_ssl: url.scheme == HTTPS_SCHEME,
+        keep_alive_timeout: keep_alive_timeout
+      )
     end
 
     def disconnect
@@ -144,6 +152,12 @@ module Fluent
       return value unless value.empty?
 
       raise Fluent::ConfigError, "Invalid authorization token: #{value.inspect}"
+    end
+
+    def validate_keep_alive_timeout(value)
+      return value if value >= 0
+
+      raise Fluent::ConfigError, "Invalid keep-alive timeout: #{value.inspect}"
     end
   end
 end
