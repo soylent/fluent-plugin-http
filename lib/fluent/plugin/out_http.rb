@@ -38,23 +38,13 @@ module Fluent
       @authorization_token = validate_authorization_token(authorization_token)
     end
 
-    # Hook method that is called at the startup
-    #
-    # @return void
-    def start
-      super
-
-      is_https = url.scheme == 'https'
-      @http = Net::HTTP.start(url.host, url.port, use_ssl: is_https)
-    end
-
     # Hook method that is called at the shutdown
     #
     # @return void
     def shutdown
       super
 
-      http.finish
+      disconnect
     end
 
     # Serializes the event
@@ -73,6 +63,8 @@ module Fluent
     #   formatted events
     # @return void
     def write(chunk)
+      return if chunk.empty?
+
       records = []
 
       chunk.msgpack_each do |tag_time_record|
@@ -80,7 +72,7 @@ module Fluent
       end
 
       post_records = post_records_request(records)
-      response = http.request(post_records)
+      response = connect.request(post_records)
 
       return if accept_status_code.include?(response.code)
       raise ResponseError.error(post_records, response)
@@ -88,12 +80,26 @@ module Fluent
 
     private
 
-    attr_reader :http
-
     JSON_MIME_TYPE = 'application/json'.freeze
-    USER_AGENT = 'FluentPluginHTTP'.freeze
+    private_constant :JSON_MIME_TYPE
 
-    private_constant :USER_AGENT, :JSON_MIME_TYPE
+    USER_AGENT = 'FluentPluginHTTP'.freeze
+    private_constant :USER_AGENT
+
+    HTTPS_SCHEME = 'https'.freeze
+    private_constant :HTTPS_SCHEME
+
+    def connect
+      @http ||=
+        Net::HTTP.start(url.host, url.port, use_ssl: url.scheme == HTTPS_SCHEME)
+    end
+
+    def disconnect
+      return unless defined?(@http)
+      return unless @http
+
+      @http.finish
+    end
 
     def post_records_request(records)
       Net::HTTP::Post.new(url).tap do |request|

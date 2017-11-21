@@ -48,4 +48,20 @@ class TestHTTPRequest < Test::Unit::TestCase
 
     assert_requested request.with(body: '[{"foo":"联想"}]')
   end
+
+  test 'that empty chunks are not sent' do
+    request = stub_request(:post, @driver.instance.url)
+
+    @driver.run
+
+    assert_not_requested request
+  end
+
+  test 'that opening a connection is deferred' do
+    driver = create_driver('url http://nonexistent.host/')
+
+    with_allowed_http_requests do
+      assert_nothing_raised { driver.run }
+    end
+  end
 end
