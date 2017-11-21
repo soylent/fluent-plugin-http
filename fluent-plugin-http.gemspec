@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = 'lib'
 
   spec.add_runtime_dependency 'fluentd', ENV.fetch('FLUENTD_VERSION', '~> 0.12')
-  spec.add_runtime_dependency 'oj'
+  spec.add_runtime_dependency 'oj', '~> 3.3'
 
   spec.add_development_dependency 'bundler', '~> 1.7'
   spec.add_development_dependency 'pry', '~> 0.10'
