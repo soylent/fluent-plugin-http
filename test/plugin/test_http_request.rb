@@ -56,4 +56,12 @@ class TestHTTPRequest < Test::Unit::TestCase
 
     assert_not_requested request
   end
+
+  test 'that opening a connection is deferred' do
+    driver = create_driver('url http://nonexistent.host/')
+
+    with_allowed_http_requests do
+      assert_nothing_raised { driver.run }
+    end
+  end
 end
