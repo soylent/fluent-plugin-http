@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.5.0] - 2017-11-22
+### Added
+- Configuration option `keep_alive_timeout`
+
+### Fixed
+- Skip empty chunks
+- Defer opening a new connection
+
 ## [0.4.2] - 2017-05-16
 ### Fixed
 - JSON encoding issue
