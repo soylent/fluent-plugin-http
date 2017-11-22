@@ -88,4 +88,44 @@ class TestConfiguration < Test::Unit::TestCase
       create_driver_with_default_url 'authorization_token'
     end
   end
+
+  test 'that keep-alive timeout can be an integer' do
+    driver = create_driver_with_default_url 'keep_alive_timeout 32'
+
+    assert_equal 32.0, driver.instance.keep_alive_timeout
+  end
+
+  test 'that keep-alive timeout can be a float' do
+    driver = create_driver_with_default_url 'keep_alive_timeout 32.5'
+
+    assert_equal 32.5, driver.instance.keep_alive_timeout
+  end
+
+  test 'that keep-alive timeout is 60 by default' do
+    driver = create_driver_with_default_url
+
+    assert_equal 60.0, driver.instance.keep_alive_timeout
+  end
+
+  test 'that keep-alive timeout cannot negative' do
+    assert_raise Fluent::ConfigError do
+      create_driver_with_default_url 'keep_alive_timeout -1'
+    end
+  end
+
+  test 'that keep-alive timeout is zero if the value is missing' do
+    driver = create_driver_with_default_url 'keep_alive_timeout'
+
+    # NOTE: We should throw `Fluent::ConfigError` in this case but
+    # Fluentd instead converts the invalid value to zero
+    assert_equal 0.0, driver.instance.keep_alive_timeout
+  end
+
+  test 'that keep-alive timeout is zero if the value is invalid' do
+    driver = create_driver_with_default_url 'keep_alive_timeout oops'
+
+    # NOTE: We should throw `Fluent::ConfigError` in this case but
+    # Fluentd instead converts the invalid value to zero
+    assert_equal 0.0, driver.instance.keep_alive_timeout
+  end
 end
