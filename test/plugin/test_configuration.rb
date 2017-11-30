@@ -128,4 +128,39 @@ class TestConfiguration < Test::Unit::TestCase
     # Fluentd instead converts the invalid value to zero
     assert_equal 0.0, driver.instance.keep_alive_timeout
   end
+
+  test 'that username and password can be configured' do
+    driver = create_driver_with_default_url \
+      "username user\n" \
+      'password secret'
+
+    assert_equal 'user', driver.instance.username
+    assert_equal 'secret', driver.instance.password
+  end
+
+  test 'that username is nil by default' do
+    driver = create_driver_with_default_url
+
+    assert_nil driver.instance.username
+  end
+
+  test 'that password is nil by default' do
+    driver = create_driver_with_default_url
+
+    assert_nil driver.instance.password
+  end
+
+  test 'that password requires username' do
+    assert_raise Fluent::ConfigError do
+      create_driver_with_default_url 'password secret'
+    end
+  end
+
+  test 'that authorization token and username are mutually exclusive' do
+    assert_raise Fluent::ConfigError do
+      create_driver_with_default_url \
+        "authorization_token secret\n" \
+        'username user'
+    end
+  end
 end

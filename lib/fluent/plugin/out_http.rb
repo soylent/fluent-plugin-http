@@ -8,7 +8,7 @@ require 'uri'
 # Fluentd
 module Fluent
   # The out_http buffered output plugin sends event records via HTTP.
-  class HTTPOutput < ObjectBufferedOutput
+  class HTTPOutput < ObjectBufferedOutput # rubocop:disable Metrics/ClassLength
     Fluent::Plugin.register_output('http', self)
 
     desc 'URL to send event records to'
@@ -22,6 +22,12 @@ module Fluent
 
     desc 'Keep-alive timeout'
     config_param :keep_alive_timeout, :float, default: 60.0
+
+    desc 'Basic auth username'
+    config_param :username, :string, default: nil
+
+    desc 'Basic auth password'
+    config_param :password, :string, default: nil, secret: true
 
     def initialize
       require 'fluent/plugin/http/error'
@@ -40,6 +46,8 @@ module Fluent
       @accept_status_code = validate_accept_status_code(accept_status_code)
       @authorization_token = validate_authorization_token(authorization_token)
       @keep_alive_timeout = validate_keep_alive_timeout(keep_alive_timeout)
+      @username = validate_username(username)
+      @password = validate_password(password)
     end
 
     # Hook method that is called at the shutdown
@@ -119,6 +127,8 @@ module Fluent
         if authorization_token
           request['Authorization'] = "Token token=#{authorization_token}"
         end
+
+        request.basic_auth(username, password) if username
       end
     end
 
@@ -158,6 +168,25 @@ module Fluent
       return value if value >= 0
 
       raise Fluent::ConfigError, "Invalid keep-alive timeout: #{value.inspect}"
+    end
+
+    def validate_username(value)
+      return value if value.nil?
+
+      if authorization_token
+        raise Fluent::ConfigError,
+              'Mutually exclusive: authorization_token and username'
+      end
+
+      return value unless value.empty?
+
+      raise Fluent::ConfigError, "Invalid username: #{value.inspect}"
+    end
+
+    def validate_password(value)
+      return value if value.nil? || username
+
+      raise Fluent::ConfigError, 'Password requires a username'
     end
   end
 end

@@ -11,8 +11,14 @@ The `out_http` buffered output plugin that sends event records via HTTP.
 
       url https://example.org/
       accept_status_code 200,204,303 # Default: 200
-      authorization_token secret # Default: nil
       keep_alive_timeout 60 # Seconds, default: 60
+
+      # Enable token auth
+      # authorization_token secret
+
+      # Or enable basic auth
+      # username user
+      # password secret
     </match>
 
 ## Contributing
