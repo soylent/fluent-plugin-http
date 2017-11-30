@@ -9,9 +9,14 @@ The `out_http` buffered output plugin that sends event records via HTTP.
     <match foo.bar>
       @type http
 
+      # Post event records to this URL
       url https://example.org/
-      accept_status_code 200,204,303 # Default: 200
-      keep_alive_timeout 60 # Seconds, default: 60
+
+      # Acceptable response status codes, default 200
+      accept_status_code 200,204,303
+
+      # Keep the connection open for 60 seconds by default
+      keep_alive_timeout 60
 
       # Enable token auth
       # authorization_token secret
