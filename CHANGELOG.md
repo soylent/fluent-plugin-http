@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.6.0] - 2017-11-30
+### Added
+- Basic authentication
+
 ## [0.5.0] - 2017-11-22
 ### Added
 - Configuration option `keep_alive_timeout`
