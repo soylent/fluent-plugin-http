@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.0.0] - 2018-02-01
+### Added
+- Support Fluentd v1.0
+
 ## [0.6.0] - 2017-11-30
 ### Added
 - Basic authentication
