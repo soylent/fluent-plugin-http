@@ -92,12 +92,6 @@ module Fluent
 
     private
 
-    JSON_MIME_TYPE = 'application/json'.freeze
-    private_constant :JSON_MIME_TYPE
-
-    USER_AGENT = 'FluentPluginHTTP'.freeze
-    private_constant :USER_AGENT
-
     HTTPS_SCHEME = 'https'.freeze
     private_constant :HTTPS_SCHEME
 
@@ -116,6 +110,12 @@ module Fluent
 
       @http.finish
     end
+
+    JSON_MIME_TYPE = 'application/json'.freeze
+    private_constant :JSON_MIME_TYPE
+
+    USER_AGENT = 'FluentPluginHTTP'.freeze
+    private_constant :USER_AGENT
 
     def post_records_request(records)
       Net::HTTP::Post.new(url).tap do |request|
