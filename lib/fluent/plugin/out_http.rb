@@ -87,19 +87,17 @@ module Fluent
       response = connect.request(post_records)
 
       return if accept_status_code.include?(response.code)
+
       raise ResponseError.error(post_records, response)
     end
 
     private
 
-    HTTPS_SCHEME = 'https'.freeze
-    private_constant :HTTPS_SCHEME
-
     def connect
       @http ||= Net::HTTP.start(
         url.host,
         url.port,
-        use_ssl: url.scheme == HTTPS_SCHEME,
+        use_ssl: url.scheme == 'https',
         keep_alive_timeout: keep_alive_timeout
       )
     end
@@ -111,18 +109,12 @@ module Fluent
       @http.finish
     end
 
-    JSON_MIME_TYPE = 'application/json'.freeze
-    private_constant :JSON_MIME_TYPE
-
-    USER_AGENT = 'FluentPluginHTTP'.freeze
-    private_constant :USER_AGENT
-
     def post_records_request(records)
       Net::HTTP::Post.new(url).tap do |request|
         request.body = Oj.dump(records)
 
-        request.content_type = JSON_MIME_TYPE
-        request['User-Agent'] = USER_AGENT
+        request.content_type = 'application/json'
+        request['User-Agent'] = 'FluentPluginHTTP'
 
         if authorization_token
           request['Authorization'] = "Token token=#{authorization_token}"
@@ -138,8 +130,8 @@ module Fluent
 
       raise Fluent::ConfigError,
             "Unacceptable URL scheme, expected HTTP or HTTPs: #{test_url}"
-    rescue URI::InvalidURIError => invalid_uri_error
-      raise Fluent::ConfigError, invalid_uri_error
+    rescue URI::InvalidURIError => e
+      raise Fluent::ConfigError, e
     end
 
     def validate_accept_status_code(status_codes)

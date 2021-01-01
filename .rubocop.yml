@@ -1,8 +1,10 @@
 ---
-
-AllCops:
-  TargetRubyVersion: 2.1
-
+Layout/LineLength:
+  Max: 80
 Metrics/ClassLength:
   Exclude:
     - test/**/test_*.rb
+Gemspec/RequiredRubyVersion:
+  Enabled: false
+Naming/MemoizedInstanceVariableName:
+  Enabled: false
