@@ -6,6 +6,7 @@ Gem::Specification.new do |spec|
   spec.author  = 'Konstantin'
   spec.summary = 'Fluentd output plugin that sends event records via HTTP'
   spec.license = 'Apache-2.0'
+  spec.homepage = 'https://github.com/soylent/fluent-plugin-http'
 
   spec.files = Dir['lib/**/*']
   spec.require_paths = 'lib'
