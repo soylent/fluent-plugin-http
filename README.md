@@ -1,6 +1,6 @@
 # Fluentd `out_http` plugin
 
-Buffered output plugin that sends event records via HTTP.
+Buffered output plugin for sending event records to an HTTP endpoint.
 
 [![Build Status](https://travis-ci.org/soylent/fluent-plugin-http.svg?branch=master)](https://travis-ci.org/soylent/fluent-plugin-http)
 

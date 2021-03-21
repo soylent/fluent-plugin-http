@@ -4,7 +4,7 @@ Gem::Specification.new do |spec|
   spec.name = 'fluent-plugin-http'
   spec.version = '1.0.1'
   spec.author = 'Konstantin'
-  spec.summary = 'Fluentd output plugin that sends event records via HTTP'
+  spec.summary = 'Fluentd output plugin to send logs to an HTTP endpoint'
   spec.license = 'Apache-2.0'
   spec.homepage = 'https://github.com/soylent/fluent-plugin-http'
   spec.required_ruby_version = '~> 2.1'
