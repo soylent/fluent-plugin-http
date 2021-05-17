@@ -2,12 +2,12 @@
 
 Gem::Specification.new do |spec|
   spec.name = 'fluent-plugin-http'
-  spec.version = '1.0.1'
+  spec.version = '1.0.2'
   spec.author = 'Konstantin'
   spec.summary = 'Fluentd output plugin to send logs to an HTTP endpoint'
   spec.license = 'Apache-2.0'
   spec.homepage = 'https://github.com/soylent/fluent-plugin-http'
-  spec.required_ruby_version = '~> 2.1'
+  spec.required_ruby_version = '>= 2.1', '< 4'
   spec.files = Dir['lib/**/*']
   spec.require_paths = 'lib'
   spec.add_runtime_dependency 'fluentd', ENV.fetch('FLUENTD_VERSION', '>= 0.12')
