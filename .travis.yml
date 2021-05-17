@@ -5,6 +5,7 @@ rvm:
   - 2.1
   - 2.3.1
   - 2.7
+  - 3.0
 env:
   - FLUENTD_VERSION='~> 0.12.0'
   - FLUENTD_VERSION='~> 0.14.0'
