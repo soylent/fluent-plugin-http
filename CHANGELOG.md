@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.1.0] - 2021-05-17
+### Added
+- Ruby 3.0 support @mikecarlton
+
 ## [1.0.1] - 2020-12-31
 ### Fixed
 - Gemspec
