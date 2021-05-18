@@ -10,3 +10,9 @@ env:
   - FLUENTD_VERSION='~> 0.12.0'
   - FLUENTD_VERSION='~> 0.14.0'
   - FLUENTD_VERSION='~> 1.0'
+jobs:
+  exclude:
+    - rvm: 3.0
+      env: FLUENTD_VERSION='~> 0.12.0'
+    - rvm: 3.0
+      env: FLUENTD_VERSION='~> 0.14.0'
