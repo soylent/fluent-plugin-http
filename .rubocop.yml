@@ -8,3 +8,6 @@ Gemspec/RequiredRubyVersion:
   Enabled: false
 Naming/MemoizedInstanceVariableName:
   Enabled: false
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 2.5
